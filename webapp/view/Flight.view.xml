@@ -1,0 +1,91 @@
+<mvc:View controllerName="edu.be.ap.flight.zsd000flight.controller.Flight" xmlns="sap.m" xmlns:semantic="sap.f.semantic" xmlns:mvc="sap.ui.core.mvc" xmlns:layout="sap.ui.layout">
+    <semantic:SemanticPage id="detailPage" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
+        <semantic:titleHeading>
+            <Title text="{Airpfrom} - {Airpto}" level="H2" />
+        </semantic:titleHeading>
+
+        <semantic:titleExpandedContent>
+            <Text text="{Connid}" />
+        </semantic:titleExpandedContent>
+
+        <semantic:titleSnappedContent>
+            <Text text="{Connid} | {Airpfrom}, {Cityfrom} ({Countryfr}) - {Airpto}, {Cityto} ({Countryto})" />
+        </semantic:titleSnappedContent>
+
+        <semantic:headerContent>
+            <layout:HorizontalLayout allowWrapping="true">
+                <layout:VerticalLayout class="sapUiMediumMarginEnd">
+                    <ObjectAttribute title="From" text="{Airpfrom}, {Cityfrom} ({Countryfr})" />
+                    <ObjectAttribute title="To" text="{Airpto}, {Cityto} ({Countryto})" />
+                    <ObjectAttribute title="Flight type" text="{Fltype}" />
+                </layout:VerticalLayout>
+                <layout:VerticalLayout>
+                    <ObjectAttribute
+                        title="Flight time"
+                        text="{Fltime}{i18n>minutes} (Dep: {
+                            path: 'Deptime',
+                            type: 'sap.ui.model.odata.type.Time',
+                            formatOptions: {
+                                pattern: 'HH:mm'
+                            }
+                        } - Arr: {
+                            path: 'Arrtime',
+                            type: 'sap.ui.model.odata.type.Time',
+                            formatOptions: {
+                                pattern: 'HH:mm'
+                            }
+                        })"
+                    />
+                    <ObjectAttribute title="Distance" text="{Distance} ({Distid})" />
+                </layout:VerticalLayout>
+            </layout:HorizontalLayout>
+        </semantic:headerContent>
+        <semantic:content>
+            <Table id="flightList" width="auto" items="{FlightSet}" updateFinished=".onListUpdateFinished" noDataText="{i18n>detailLineItemTableNoDataText}" busyIndicatorDelay="{detailView>/lineItemTableDelay}">
+                <headerToolbar>
+                    <Toolbar>
+                        <Title text="{detailView>/lineItemListTitle}" titleStyle="H3" level="H3" />
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column>
+                        <Text text="{i18n>date}" />
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+                        <Text text="{i18n>price}" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <ObjectIdentifier
+                                title="{
+                                    path: 'Fldate',
+                                    type: 'sap.ui.model.type.Date',
+                                    formatOptions: {
+                                        style: 'medium'
+                                    }
+                                }"
+                                text="{Planetype}"
+                            />
+                            <ObjectNumber number="{
+                                    path: 'Price',
+                                    formatter: '.formatter.currencyValue'
+                                }" unit="{Currency}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </semantic:content>
+        <semantic:closeAction>
+            <semantic:CloseAction id="closeColumn" press=".onCloseDetailPress" />
+        </semantic:closeAction>
+
+        <semantic:fullScreenAction>
+            <semantic:FullScreenAction id="enterFullScreen" visible="{= !${device>/system/phone} &amp;&amp; !${appView>/actionButtonsInfo/endColumn/fullScreen}}" press=".toggleFullScreen" />
+        </semantic:fullScreenAction>
+        <semantic:exitFullScreenAction>
+            <semantic:ExitFullScreenAction id="exitFullScreen" visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/endColumn/fullScreen}}" press=".toggleFullScreen" />
+        </semantic:exitFullScreenAction>
+    </semantic:SemanticPage>
+</mvc:View>
